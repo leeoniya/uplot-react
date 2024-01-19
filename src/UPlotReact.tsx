@@ -45,20 +45,20 @@ export const UPlotReact = ({
     if (data != prevData) {
       u.batch(() => {
         u.setData(data);
-      });
+      }, true);
     } else if (width != prevWidth || height != prevHeight) {
       u.batch(() => {
         u.setSize({ width, height });
-      });
+      }, true);
     }
-  } else {
-    // this lets plugins omit manually setting up setScale hooks to update possibly-portalled plugins on client-only zoom
-    // builder.addHook('setScale');
-    // todo: add setScales() hook?
   }
 
   useLayoutEffect(() => {
     console.log(`UPlotReact ${uid}: useLayoutEffect, new uPlot()`);
+
+    // todo: add setScales() hook to builder?
+    // this lets plugins omit manually setting up setScale hooks to update possibly-portalled plugins on client-only zoom
+    // builder.addHook('setScale');
 
     plotRef.current = new uPlot(
       {
