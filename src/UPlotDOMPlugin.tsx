@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { UPlotOptsBuilder } from "./UPlotOptsBuilder";
 import { createPortal } from "react-dom";
+import uPlot from "uplot";
 
 interface UPlotDOMPluginProps {
     annos: number[];
@@ -28,6 +29,24 @@ export const UPlotDOMPlugin = ({ builder, annos }: UPlotDOMPluginProps) => {
       draw: [
         (u) => {
           console.log(`UPlotDOMPlugin ${uid}: uPlot draw`, u.data, annoRef.current);
+          const p = new Path2D();
+
+          const zeroPos = u.valToPos(0, 'y', true);
+
+          annoRef.current.forEach(val => {
+            const x = u.valToPos(u.data[1].indexOf(val), "x", true);
+            const y = u.valToPos(val, "y", true);
+
+            p.moveTo(x, zeroPos);
+            p.lineTo(x, y);
+          });
+
+          u.ctx.save();
+          u.ctx.lineWidth = 2 * uPlot.pxRatio;
+          u.ctx.strokeStyle = 'purple';
+          u.ctx.setLineDash([10,10]);
+          u.ctx.stroke(p);
+          u.ctx.restore();
         },
       ],
     });
@@ -57,6 +76,8 @@ export const UPlotDOMPlugin = ({ builder, annos }: UPlotDOMPluginProps) => {
         style={{
           position: "absolute",
           left: `${u.valToPos(u.data[1].indexOf(val), "x")}px`,
+          top: `${u.valToPos(val, "y")}px`,
+          transform: 'translate(-50%, -100%)',
         }}
       >
         {val}
