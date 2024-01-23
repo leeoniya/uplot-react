@@ -29,6 +29,7 @@ export const UPlotReact = ({
   children,
 }: UPlotReactProps) => {
   const [uid] = useState(() => (Math.random() + 1).toString(36).substring(7));
+  console.log(`UPlotReact ${uid}: render()`);
 
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
@@ -81,8 +82,6 @@ export const UPlotReact = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(`UPlotReact ${uid}: render()`);
 
   return <div ref={domRef}>{children()}</div>;
 };

@@ -10,6 +10,8 @@ interface UPlotDOMPluginProps {
 
 export const UPlotDOMPlugin = ({ builder, annos }: UPlotDOMPluginProps) => {
   const [uid] = useState(() => (Math.random() + 1).toString(36).substring(7));
+  console.log(`UPlotDOMPlugin ${uid}: render()`, annos);
+
   const plotRef = useRef<uPlot>();
 
   const annoRef = useRef(annos);
@@ -62,8 +64,6 @@ export const UPlotDOMPlugin = ({ builder, annos }: UPlotDOMPluginProps) => {
     console.log(`UPlotDOMPlugin ${uid}: useLayoutEffect() marker redraw()`);
     plotRef.current?.redraw();
   }, [annos]);
-
-  console.log(`UPlotDOMPlugin ${uid}: render()`);
 
   const u = plotRef.current;
 
